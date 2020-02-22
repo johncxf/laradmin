@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
 //        factory(App\User::class, 100)->create();
 //        $user = \App\User::find(1);
 //        $user->name = '一切随风';
-//        $user->email = '13777719513@163.com';
+//        $user->email = '13777777777@163.com';
 //        $user->password = bcrypt('123456');
 //        $user->is_admin = true;
 //        $user->save();
@@ -28,7 +28,7 @@ class UserSeeder extends Seeder
             'username' => 'Administrator',
             'avatar' => 'img/default/avatar.jpg',
             'password' => bcrypt('admin_123456'),
-            'mobile' => '13777719513',
+            'mobile' => '13777777777',
             'email' => 'admin@qq.com',
             'token' => '123456',
             'create_at' => date('Y-m-d H:i:s', time())
@@ -37,7 +37,7 @@ class UserSeeder extends Seeder
         $user = [
             'username' => 'Administrator',
             'password' => bcrypt('admin_123456'),
-            'mobile' => '13777719513',
+            'mobile' => '13777777777',
             'email' => 'admin@qq.com',
             'nickname' => '一切随风',
             'avatar' => '',
