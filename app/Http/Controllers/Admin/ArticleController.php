@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Article;
 use App\Models\Category;
 use App\Stores\Admin\ArticleStore;
+use App\Stores\Common\UploadStore;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -40,7 +41,7 @@ class ArticleController extends Controller
 
         $articles = $this->objStoreArticle->getAllArticles($where);
 
-        return view('admin.article.index', compact('articles'));
+        return response()->view('admin.article.index', compact('articles'));
     }
 
     /**
@@ -78,11 +79,17 @@ class ArticleController extends Controller
             'create_at' => date('Y-m-d H:i:s',time()),
             'update_at' => date('Y-m-d H:i:s',time()),
         ];
+        $url = '';
+        if ($request['thumb']) {
+            $ret = (new UploadStore())->putImg($request['thumb'],'uploads/article/');
+            if (empty($ret)) {
+                return back()->with('danger', '封面上传失败');
+            }
+            $url = $ret['save_path'].'/'.$ret['file_name'];
+            $data_article['thumb'] = $url;
+        }
         if ($request['cid']) {
             $data_article['cid'] = $request['cid'];
-        }
-        if ($request['thumb']) {
-            $data_article['thumb'] = $request['thumb'];
         }
         if ($request['is_top']) {
             $data_article['is_top'] = $request['is_top'];
@@ -109,26 +116,21 @@ class ArticleController extends Controller
             if ($ret) {
                 return redirect('/admin/article')->with('success', '发布文章成功');
             } else {
+                if (file_exists($url)) {
+                    unlink($url);
+                }
                 return back()->with('danger', '发布文章失败');
             }
         } else {
             if ($ret) {
                 return redirect('/admin/article/'.$ret.'/edit')->with('success', '保存文章成功');
             } else {
+                if (file_exists($url)) {
+                    unlink($url);
+                }
                 return back()->with('danger', '保存文章失败');
             }
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
     }
 
     /**
@@ -167,11 +169,17 @@ class ArticleController extends Controller
             'content' => $request['content'],
             'update_at' => date('Y-m-d H:i:s',time()),
         ];
+        $url = '';
+        if ($request['thumb']) {
+            $ret = (new UploadStore())->putImg($request['thumb'],'uploads/article/');
+            if (empty($ret)) {
+                return back()->with('danger', '封面上传失败');
+            }
+            $url = $ret['save_path'].'/'.$ret['file_name'];
+            $data_article['thumb'] = $url;
+        }
         if ($request['cid']) {
             $data_article['cid'] = $request['cid'];
-        }
-        if ($request['thumb']) {
-            $data_article['thumb'] = $request['thumb'];
         }
         if ($request['is_top']) {
             $data_article['is_top'] = $request['is_top'];
@@ -194,9 +202,18 @@ class ArticleController extends Controller
             $data_article['status'] = $request['status'];
 
         }
+        $oldImg = $this->objStoreArticle->getArticleImg($id);
         if ($this->objStoreArticle->createArticle($data_article,$item_ids,$tag_ids,$id)) {
+            if ($request['thumb']) {
+                if (file_exists($oldImg)) {
+                    unlink($oldImg);
+                }
+            }
             return back()->with('success', '修改文章成功');
         } else {
+            if (file_exists($url)) {
+                unlink($url);
+            }
             return back()->with('danger', '修改文章失败');
         }
     }

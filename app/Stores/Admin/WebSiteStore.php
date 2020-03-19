@@ -40,7 +40,7 @@ class WebSiteStore extends BaseStore
         $role_ids = $this->objUtilsPermission->getRoleIds($admin_id, 'admin');
         // 获取所有需要显示的菜单
         if (in_array(config('website.webMasterRoleIds'), $role_ids)) {// 超级管理员，拥有所有权限
-            $menus_all = Menu::where(['status' => 1])
+            $menus_all = Menu::where(['status' => 1, 'module' => 'admin'])
                 ->orderBy('sort')
                 ->get()
                 ->toArray();

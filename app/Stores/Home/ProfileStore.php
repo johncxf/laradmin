@@ -97,6 +97,41 @@ class ProfileStore extends BaseStore
         return $stars;
     }
 
+    /**
+     * @param $uid
+     * @return array
+     */
+    public function getStarResource($uid)
+    {
+        $stars = DB::connection($this->CONN_DB)->table($this->RESOURCE_STAR_TB)
+            ->where(['uid' => $uid])
+            ->get()
+            ->toArray();
+        $rids = [];
+        foreach ($stars as $star) {
+            $rids[] = $star->rid;
+        }
+        $resources = DB::connection($this->CONN_DB)->table($this->RESOURCE_TB)
+            ->whereIn('id',$rids)
+            ->get()
+            ->toArray();
+        $arr_resource = [];
+        foreach ($resources as $resource){
+            $arr_resource[$resource->id] = (array)$resource;
+        }
+        foreach ($stars as $key => $star) {
+            $star->title = $arr_resource[$star->rid]['title'];
+            $stars[$key] = $star;
+        }
+
+        return $stars;
+    }
+
+    /**
+     * @param $uid
+     * @param $img
+     * @return bool
+     */
     public function updateAvatar($uid,$img)
     {
         try {
@@ -109,10 +144,25 @@ class ProfileStore extends BaseStore
         return true;
     }
 
+    /**
+     * @param $uid
+     * @return mixed
+     */
     public function getOldAvatar($uid)
     {
         return DB::connection($this->CONN_DB)->table($this->USER_TB)
             ->where('id',$uid)
             ->value('avatar');
+    }
+
+    /**
+     * @param $uid
+     * @return \Illuminate\Database\Eloquent\Model|\Illuminate\Database\Query\Builder|object|null
+     */
+    public function getAccountInfo($uid)
+    {
+        return DB::connection($this->CONN_DB)->table($this->USER_ACCOUNT_TB)
+            ->where('uid',$uid)
+            ->first();
     }
 }

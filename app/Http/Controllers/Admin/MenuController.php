@@ -26,7 +26,7 @@ class MenuController extends Controller
         // 获取菜单
         $menus = $this->objStoreMenu->getAllMenus();
 
-        return view('admin.menus.index', ['menus' => $menus]);
+        return view('admin.menu.index', ['menus' => $menus]);
 
     }
 
@@ -44,7 +44,7 @@ class MenuController extends Controller
 
         $select_menus = $this->objStoreMenu->selectMenus($parentId);
 
-        return view('admin.menus.create', ['select_menus' => $select_menus]);
+        return view('admin.menu.create', ['select_menus' => $select_menus]);
     }
 
     /**
@@ -89,7 +89,7 @@ class MenuController extends Controller
             $data['remark'] = $request->remark;
         }
         if (isset($request->url)) {
-            $data['remark'] = $request->url;
+            $data['url'] = $request->url;
         }
         $add_res = $this->objStoreMenu->storeMenu($data);
         if ($add_res === true) {
@@ -123,7 +123,7 @@ class MenuController extends Controller
 
         $select_menus = $this->objStoreMenu->selectMenus($parentId);
 
-        return view('admin.menus.edit', ['menu' => $menu, 'select_menus' => $select_menus]);
+        return view('admin.menu.edit', ['menu' => $menu, 'select_menus' => $select_menus]);
     }
 
     /**
@@ -171,7 +171,7 @@ class MenuController extends Controller
             $data['remark'] = $request->remark;
         }
         if (isset($request->url)) {
-            $data['remark'] = $request->url;
+            $data['url'] = $request->url;
         }
         $update = $this->objStoreMenu->updateMenu($id, $data);
         if ($update) {
@@ -183,13 +183,6 @@ class MenuController extends Controller
         }
     }
 
-    /**
-     * @param $id
-     */
-    public function show($id)
-    {
-
-    }
     /**
      * 删除菜单
      * @param $id
@@ -222,7 +215,7 @@ class MenuController extends Controller
             $result['info'] = '同步失败！';
             return $result;
         }
-        $ret = $this->objStoreMenu->synchro($config_menus);
+        $ret = $this->objStoreMenu->synchro($config_menus,'admin');
         if (empty($ret)) {
             $result['state'] = 'success';
             $result['info'] = '同步成功！';

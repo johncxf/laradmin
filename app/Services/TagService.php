@@ -19,6 +19,8 @@ class TagService
         $this->link();
         $this->list();
         $this->slide();
+        $this->download_list();
+        $this->menu();
     }
 
     /**
@@ -31,7 +33,7 @@ class TagService
             $php = <<<php
             <?php
                 \$params = $expression;
-                \$db = \App\Models\Category::where('status',1)->get()->toArray();
+                \$db = \App\Models\Category::where('status',1)->orderBy('sort','asc')->get()->toArray();
                 \$cates = (new \App\Tools\MenuUtils)->generateTree(\$db, 'id', 'pid', '_child');
                 foreach(\$cates as \$cate):
             ?>
@@ -136,6 +138,65 @@ php;
             return $php;
         });
         Blade::directive('endSlide',function(){
+            return "<?php endforeach; ?>";
+        });
+    }
+
+    /**
+     * 资源下载排序
+     */
+    public function download_list()
+    {
+        Blade::directive('download',function ($expression){
+            $expression = $expression?$expression:'[]';
+            $php = <<<php
+            <?php
+                \$params = $expression;
+                \$type = 'download';
+                \$limit = 10;
+                if(isset(\$params['type'])){
+                    \$type = \$params['type'];
+                }
+                if(isset(\$params['limit'])){
+                    \$limit = \$params['limit'];
+                }
+                if (\$type == 'download') {
+                    \$data = (new \App\Stores\Home\DownloadStore)->download_top(\$limit);
+                } else {
+                    \$data = (new \App\Stores\Home\DownloadStore)->star_top(\$limit);
+                }
+                
+                foreach(\$data as \$field):
+            ?>
+php;
+            return $php;
+        });
+        Blade::directive('endDownload',function(){
+            return "<?php endforeach; ?>";
+        });
+    }
+
+    /**
+     * 前台菜单
+     */
+    public function menu()
+    {
+        Blade::directive('menu',function ($expression){
+            $expression = $expression?$expression:'[]';
+            $php = <<<php
+            <?php
+                \$params = $expression;
+                \$data = \App\Models\Menu::where(['status'=>1,'module'=>'home'])
+                ->orderBy('sort','asc')
+                ->get()
+                ->toArray();
+                
+                foreach(\$data as \$field):
+            ?>
+php;
+            return $php;
+        });
+        Blade::directive('endMenu',function(){
             return "<?php endforeach; ?>";
         });
     }

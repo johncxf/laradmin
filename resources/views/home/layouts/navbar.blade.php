@@ -20,7 +20,7 @@
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown-{{$cate['id']}}">
                             @foreach($cate['_child'] as $first_down)
                                 @if(!empty($first_down['url']))
-                                    <a class="dropdown-item" href="{{$first_down['url']}}" target="_blank">{{$first_down['name']}}</a>
+                                    <a class="dropdown-item" href="{{$first_down['url']}}">{{$first_down['name']}}</a>
                                 @else
                                     <a class="dropdown-item" href="/category/{{$first_down['alias']}}.html">{{$first_down['name']}}</a>
                                 @endif
@@ -30,7 +30,7 @@
                 @else
                     <li class="nav-item">
                         @if(!empty($cate['url']))
-                            <a class="nav-link" href="{{$cate['url']}}" target="_blank">{{$cate['name']}}</a>
+                            <a class="nav-link" href="{{$cate['url']}}">{{$cate['name']}}</a>
                         @else
                             <a class="nav-link" href="/category/{{$cate['alias']}}.html">{{$cate['name']}}</a>
                         @endif
@@ -39,7 +39,7 @@
             @endCategory
         </ul>
         <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+            <input class="form-control mr-sm-2" type="search" placeholder="请输入资源信息" aria-label="Search">
         </form>
         @guest
             <div class="nav-item">

@@ -20,6 +20,12 @@ class UploadStore extends BaseStore
         parent::__construct();
     }
 
+    /**
+     *
+     * @param $content
+     * @param string $rootPath
+     * @return array
+     */
     public function putImg($content,$rootPath='uploads/public/')
     {
         //处理接受到的content内容

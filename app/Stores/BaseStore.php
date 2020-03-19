@@ -31,7 +31,13 @@ class BaseStore
         $VERIFY_TB,
         $SLIDE_TB,
         $ARTICLE_PRAISE_TB,
-        $ARTICLE_STAR_TB;
+        $ARTICLE_STAR_TB,
+        $RESOURCE_TB,
+        $RESOURCE_TAG_RELATIONSHIP_TB,
+        $RESOURCE_STAR_TB,
+        $USER_ACCOUNT_TB,
+        $USER_GOLD_LOG_TB,
+        $DOWNLOAD_TB;
     /**
      * BaseStore constructor.
      */
@@ -57,19 +63,12 @@ class BaseStore
         $this->SLIDE_TB = 'slide';
         $this->ARTICLE_PRAISE_TB = 'article_praise';
         $this->ARTICLE_STAR_TB = 'article_star';
-    }
-
-    /**
-     *  获取用户登录信息
-     * @param string $guard
-     * @return int|string|null
-     */
-    protected function getUserId($guard='')
-    {
-        if ($guard) {
-            return auth($guard)->id();
-        }
-        return auth()->id();
+        $this->RESOURCE_TB = 'resource';
+        $this->RESOURCE_TAG_RELATIONSHIP_TB = 'resource_tag_relationship';
+        $this->RESOURCE_STAR_TB = 'resource_star';
+        $this->USER_ACCOUNT_TB = 'user_account';
+        $this->USER_GOLD_LOG_TB = 'user_gold_log';
+        $this->DOWNLOAD_TB = 'download';
     }
 
 }

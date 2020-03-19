@@ -61,4 +61,16 @@ class HomeStore extends BaseStore
             ->toArray();
     }
 
+    /**
+     * 获取备案号
+     * @return mixed
+     */
+    public function getBeianInfo()
+    {
+        $info = DB::connection($this->CONN_DB)->table($this->CONFIG_TB)
+            ->where('name','beian')
+            ->first();
+        return $info->value;
+    }
+
 }

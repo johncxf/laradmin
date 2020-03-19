@@ -21,7 +21,8 @@
                 <div class="form-group">
                     <label for="" class="col-form-label">类别</label>
                     <select class="custom-select" name="type">
-                        <option selected="selected" value="article">文章</option>
+                        <option selected="selected" value="common">公共</option>
+                        <option value="article">文章</option>
                         <option value="resource">资源</option>
                     </select>
                 </div>
@@ -68,6 +69,7 @@
                                 <div class="form-group">
                                     <label for="" class="col-form-label">类别</label>
                                     <select class="custom-select" name="type">
+                                        <option value="common" {{$tag['type']=='common'?'selected':''}}>公共</option>
                                         <option value="article" {{$tag['type']=='article'?'selected':''}}>文章</option>
                                         <option value="resource" {{$tag['type']=='resource'?'selected':''}}>资源</option>
                                     </select>

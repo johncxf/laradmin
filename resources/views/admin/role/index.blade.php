@@ -82,37 +82,37 @@
                                                 <button type="button" class="btn btn-danger btn-sm" onclick="btnSubmit({{$role->id}})" id="js-btn-delete-{{$role->id}}">删除</button>
                                             </form>
                                         </div>
-                                        @component('admin.component.modal', ['id' => "editRole{$role->id}", 'url' => "/admin/role/{$role->id}", 'title' => '编辑角色', 'method' => 'PUT'])
-                                            <div class="form-group">
-                                                <label for="exampleInput1">角色名称</label>
-                                                <input type="text" class="form-control" id="" value="{{$role->name}}" name="name">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="exampleInput2">角色描述</label>
-                                                <input type="text" class="form-control" id="" value="{{$role->remark}}" name="remark">
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="">角色状态</label>
-                                                <div class="col-sm-6">
-                                                    <!-- radio -->
-                                                    <div class="form-group row">
-                                                        <div class="custom-control custom-radio col-sm-5">
-                                                            <input class="custom-control-input" type="radio" id="customRadio1{{$role->id}}"
-                                                                   name="status" value="1" @if($role->status==1) checked="" @endif>
-                                                            <label for="customRadio1{{$role->id}}" class="custom-control-label">启用</label>
-                                                        </div>
-                                                        <div class="custom-control custom-radio col-sm-5">
-                                                            <input class="custom-control-input" type="radio" id="customRadio2{{$role->id}}"
-                                                                   name="status" value="0" @if($role->status==0) checked="" @endif>
-                                                            <label for="customRadio2{{$role->id}}" class="custom-control-label">禁用</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        @endcomponent
                                     @endif
                                 </td>
                             </tr>
+                            @component('admin.component.modal', ['id' => "editRole{$role->id}", 'url' => "/admin/role/{$role->id}", 'title' => '编辑角色', 'method' => 'PUT'])
+                                <div class="form-group">
+                                    <label for="exampleInput1">角色名称</label>
+                                    <input type="text" class="form-control" id="" value="{{$role->name}}" name="name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInput2">角色描述</label>
+                                    <input type="text" class="form-control" id="" value="{{$role->remark}}" name="remark">
+                                </div>
+                                <div class="form-group">
+                                    <label for="">角色状态</label>
+                                    <div class="col-sm-6">
+                                        <!-- radio -->
+                                        <div class="form-group row">
+                                            <div class="custom-control custom-radio col-sm-5">
+                                                <input class="custom-control-input" type="radio" id="customRadio1{{$role->id}}"
+                                                       name="status" value="1" @if($role->status==1) checked="" @endif>
+                                                <label for="customRadio1{{$role->id}}" class="custom-control-label">启用</label>
+                                            </div>
+                                            <div class="custom-control custom-radio col-sm-5">
+                                                <input class="custom-control-input" type="radio" id="customRadio2{{$role->id}}"
+                                                       name="status" value="0" @if($role->status==0) checked="" @endif>
+                                                <label for="customRadio2{{$role->id}}" class="custom-control-label">禁用</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endcomponent
                         @endforeach
                         </tbody>
                         <tfoot>

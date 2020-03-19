@@ -8,7 +8,7 @@
                 <a class="nav-link" data-target="#tab2" href="#" data-toggle="tab">最新发布</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#" data-target="#tab3" data-toggle="tab">热门话题</a>
+                <a class="nav-link" href="#" data-target="#tab3" data-toggle="tab">下载排行</a>
             </li>
         </ul>
     </div>
@@ -24,7 +24,9 @@
             @endList
         </div>
         <div class="tab-pane" id="tab3">
-            <h5 class="card-title">热门话题</h5>
+            @download(['type'=>'download','limit'=>5])
+            <p class="text-left"><a href="/download/detail/{{$field->id}}.html" class="text-decoration-none">{{$field->title}}</a><hr /></p>
+            @endDownload
         </div>
     </div>
 </div>

@@ -20,7 +20,7 @@ class UserSeeder extends Seeder
 //        factory(App\User::class, 100)->create();
 //        $user = \App\User::find(1);
 //        $user->name = '一切随风';
-//        $user->email = '13777777777@163.com';
+//        $user->email = 'admin@163.com';
 //        $user->password = bcrypt('123456');
 //        $user->is_admin = true;
 //        $user->save();
@@ -52,7 +52,6 @@ class UserSeeder extends Seeder
             'status' => 1,
             'remark' => '拥有最高管理权限',
             'create_time' => date('Y-m-d H:i:s', time()),
-            'update_time' => date('Y-m-d H:i:s', time()),
             'listorder' => 0
         ];
         DB::connection($CONN_DB)->table($ROLE_TB)->insert($role);

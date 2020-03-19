@@ -23,13 +23,15 @@
         <main class="py-4">
             @yield('content')
         </main>
-
+        {{--底部--}}
+        @include('home.layouts.footer')
     </div>
 <!-- jQuery v3.4.1-->
 <script src="{{asset('plugins/jquery/jquery.min.js')}}"></script>
 <!-- Scripts -->
 <script src="{{ asset('js/app.js') }}" defer></script>
-<!-- home.js -->
+<script src="{{asset('plugins/artDialog/dialog.js')}}"></script>
+    <!-- home.js -->
 @yield('scripts')
 </body>
 </html>

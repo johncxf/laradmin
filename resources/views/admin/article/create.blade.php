@@ -22,13 +22,24 @@
                         </textarea>
                     </div>
                     <div class="form-group">
+                        <div class="custom-file">
+                            <input type="file" accept="image/jpeg" capture="camera" class="custom-file-input" id="customFile">
+                            <label class="custom-file-label" for="customFile">上传文章封面</label>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 row mb-3">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm ml-2" id="img-show"></div>
+                    </div>
+                    <div class="form-group">
                         <input type="text" class="form-control" id="" name="remark" value="{{old('remark')}}" placeholder="在此输入文章摘要">
                     </div>
                     <div class="form-group">
                         <input type="text" class="form-control" id="" name="author" value="{{old('author')}}" placeholder="署名">
                     </div>
                     <input type="hidden" name="status" value="0" class="input-article-status">
-                @endslot
+                    <input type="hidden" name="thumb">
+                    @endslot
                 @slot('card_foot')
                     <div class="float-right">
                         <button type="button" class="btn btn-default" onclick="createArticle('1')"><i class="fas fa-pencil-alt"></i> 保存到草稿箱</button>
@@ -39,7 +50,7 @@
             @endcomponent
         </div>
         <div class="col-md-3">
-            <a href="" class="btn btn-primary btn-block mb-3">草稿箱</a>
+            <a href="/admin/article" class="btn btn-primary btn-block mb-3">文章列表</a>
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">基本属性</h3>
@@ -109,6 +120,8 @@
     <script src="{{asset('plugins/summernote/summernote-bs4.min.js')}}"></script>
     <!-- 中文字体 -->
     <script src="{{asset('plugins/summernote/lang/summernote-zh-CN.min.js')}}"></script>
+    <!-- 压缩上传 -->
+    <script src="{{asset('plugins/lrz/lrz.bundle.js')}}"></script>
     <script>
         $(function () {
             // Summernote
@@ -117,6 +130,25 @@
                 height: 350,   // 定义编辑框高度
                 minHeight: null,  // 定义编辑框最低的高度
                 maxHeight: null,  // 定义编辑框最高德高度
+            });
+            $("input[type=file]").change(function () {
+                $("img").remove();
+                /* 压缩图片 */
+                lrz(this.files[0], {
+                    // 压缩参数
+                    width: 900,
+                    height: 600
+                }).then(function (rst) {
+                    /* 处理成功后执行 */
+                    rst.formData.append('base64img', rst.base64); // 添加额外参数
+                    img = '<img src="" class="rounded" alt="" style="max-height: 150px;max-width: 450px">';
+                    $(img).attr("src", rst.base64).appendTo("#img-show");
+                    $("input[name=thumb]").val(rst.base64);
+                }).catch(function (err) {
+                    /* 处理失败后执行 */
+                }).always(function () {
+                    /* 必然执行 */
+                })
             })
         });
         function createArticle(status) {

@@ -56,7 +56,7 @@ class ArticleStore extends BaseStore
      */
     public function getAllItems()
     {
-        return Item::get()->toArray();
+        return Item::whereIn('type',['common','article'])->get()->toArray();
     }
 
     /**
@@ -159,7 +159,7 @@ class ArticleStore extends BaseStore
      */
     public function getAllTags()
     {
-        return Tag::get()->toArray();
+        return Tag::whereIn('type',['common','article'])->get()->toArray();
     }
 
     /**
@@ -248,6 +248,17 @@ class ArticleStore extends BaseStore
      */
     public function getArticleById($aid) {
         return DB::connection($this->CONN_DB)->table($this->ARTICLE_TB)->find($aid);
+    }
+
+    /**
+     * @param $aid
+     * @return mixed
+     */
+    public function getArticleImg($aid)
+    {
+        return DB::connection($this->CONN_DB)->table($this->ARTICLE_TB)
+            ->where('id',$aid)
+            ->value('thumb');
     }
 
     /**

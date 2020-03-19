@@ -220,3 +220,12 @@
     margin-bottom: 1rem;
     padding: 1rem;
 }
+.main-footer {
+    background: #ffffff;
+    border-top: 1px solid #dee2e6;
+    color: #869099;
+    padding: 1rem;
+}
+.auth-container{
+    height: 625px;
+}

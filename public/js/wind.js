@@ -1,12 +1,3 @@
- ///#source 1 1 /src/1.0.0/load.js
-/*! head.load - v1.0.3 */
-/*
- * HeadJS     The only script in your <HEAD>
- * Author     Tero Piirainen  (tipiirai)
- * Maintainer Robert Hoffmann (itechnology)
- * License    MIT / http://bit.ly/mit-license
- * WebSite    http://headjs.com
- */
 (function (win, undefined) {
     "use strict";
 
@@ -27,11 +18,7 @@
         PRELOADED  = 2,
         LOADING    = 3,
         LOADED     = 4;
-    //#endregion
 
-    //#region PRIVATE functions
-
-    //#region Helper functions
     function noop() {
         // does nothing
     }
@@ -52,8 +39,6 @@
         }
     }
 
-    /* A must read: http://bonsaiden.github.com/JavaScript-Garden
-     ************************************************************/
     function is(type, obj) {
         var clas = Object.prototype.toString.call(obj).slice(8, -1);
         return obj !== undefined && obj !== null && clas === type;
@@ -92,25 +77,6 @@
     //#endregion
 
     function conditional(test, success, failure, callback) {
-        ///<summary>
-        /// INFO: use cases:
-        ///    head.test(condition, null       , "file.NOk" , callback);
-        ///    head.test(condition, "fileOk.js", null       , callback);
-        ///    head.test(condition, "fileOk.js", "file.NOk" , callback);
-        ///    head.test(condition, "fileOk.js", ["file.NOk", "file.NOk"], callback);
-        ///    head.test({
-        ///               test    : condition,
-        ///               success : [{ label1: "file1Ok.js"  }, { label2: "file2Ok.js" }],
-        ///               failure : [{ label1: "file1NOk.js" }, { label2: "file2NOk.js" }],
-        ///               callback: callback
-        ///    );
-        ///    head.test({
-        ///               test    : condition,
-        ///               success : ["file1Ok.js" , "file2Ok.js"],
-        ///               failure : ["file1NOk.js", "file2NOk.js"],
-        ///               callback: callback
-        ///    );
-        ///</summary>
         var obj = (typeof test === "object") ? test : {
             test: test,
             success: !!success ? isArray(success) ? success : [success] : false,
@@ -139,14 +105,6 @@
     }
 
     function getAsset(item) {
-        ///<summary>
-        /// Assets are in the form of
-        /// {
-        ///     name : label,
-        ///     url  : url,
-        ///     state: state
-        /// }
-        ///</summary>
         var asset = {};
 
         if (typeof item === "object") {
@@ -209,13 +167,6 @@
     }
 
     function apiLoadHack() {
-        /// <summary>preload with text/cache hack
-        ///
-        /// head.load("http://domain.com/file.js","http://domain.com/file.js", callBack)
-        /// head.load(["http://domain.com/file.js","http://domain.com/file.js"], callBack)
-        /// head.load({ label1: "http://domain.com/file.js" }, { label2: "http://domain.com/file.js" }, callBack)
-        /// head.load([{ label1: "http://domain.com/file.js" }, { label2: "http://domain.com/file.js" }], callBack)
-        /// </summary>
         var args     = arguments,
             callback = args[args.length - 1],
             rest     = [].slice.call(args, 1),
@@ -235,11 +186,6 @@
 
         // multiple arguments
         if (!!next) {
-            /* Preload with text/cache hack (not good!)
-             * http://blog.getify.com/on-script-loaders/
-             * http://www.nczonline.net/blog/2010/12/21/thoughts-on-script-loaders/
-             * If caching is not configured correctly on the server, then items could load twice !
-             *************************************************************************************/
             each(rest, function (item) {
                 // item is not a callback or empty string
                 if (!isFunction(item) && !!item) {
@@ -261,14 +207,6 @@
     }
 
     function apiLoadAsync() {
-        ///<summary>
-        /// simply load and let browser take care of ordering
-        ///
-        /// head.load("http://domain.com/file.js","http://domain.com/file.js", callBack)
-        /// head.load(["http://domain.com/file.js","http://domain.com/file.js"], callBack)
-        /// head.load({ label1: "http://domain.com/file.js" }, { label2: "http://domain.com/file.js" }, callBack)
-        /// head.load([{ label1: "http://domain.com/file.js" }, { label2: "http://domain.com/file.js" }], callBack)
-        ///</summary>
         var args     = arguments,
             callback = args[args.length - 1],
             items    = {};
@@ -382,49 +320,6 @@
         function process(event) {
             event = event || win.event;
 
-            // IE 7/8 (2 events on 1st load)
-            // 1) event.type = readystatechange, s.readyState = loading
-            // 2) event.type = readystatechange, s.readyState = loaded
-
-            // IE 7/8 (1 event on reload)
-            // 1) event.type = readystatechange, s.readyState = complete
-
-            // event.type === 'readystatechange' && /loaded|complete/.test(s.readyState)
-
-            // IE 9 (3 events on 1st load)
-            // 1) event.type = readystatechange, s.readyState = loading
-            // 2) event.type = readystatechange, s.readyState = loaded
-            // 3) event.type = load            , s.readyState = loaded
-
-            // IE 9 (2 events on reload)
-            // 1) event.type = readystatechange, s.readyState = complete
-            // 2) event.type = load            , s.readyState = complete
-
-            // event.type === 'load'             && /loaded|complete/.test(s.readyState)
-            // event.type === 'readystatechange' && /loaded|complete/.test(s.readyState)
-
-            // IE 10 (3 events on 1st load)
-            // 1) event.type = readystatechange, s.readyState = loading
-            // 2) event.type = load            , s.readyState = complete
-            // 3) event.type = readystatechange, s.readyState = loaded
-
-            // IE 10 (3 events on reload)
-            // 1) event.type = readystatechange, s.readyState = loaded
-            // 2) event.type = load            , s.readyState = complete
-            // 3) event.type = readystatechange, s.readyState = complete
-
-            // event.type === 'load'             && /loaded|complete/.test(s.readyState)
-            // event.type === 'readystatechange' && /complete/.test(s.readyState)
-
-            // Other Browsers (1 event on 1st load)
-            // 1) event.type = load, s.readyState = undefined
-
-            // Other Browsers (1 event on reload)
-            // 1) event.type = load, s.readyState = undefined
-
-            // event.type == 'load' && s.readyState = undefined
-
-            // !doc.documentMode is for IE6/7, IE8+ have documentMode
             if (event.type === "load" || (/loaded|complete/.test(ele.readyState) && (!doc.documentMode || doc.documentMode < 9))) {
                 // remove timeouts
                 win.clearTimeout(asset.errorTimeout);
@@ -484,12 +379,6 @@
         ele.onload  = ele.onreadystatechange = process;
         ele.onerror = error;
 
-        /* Good read, but doesn't give much hope !
-         * http://blog.getify.com/on-script-loaders/
-         * http://www.nczonline.net/blog/2010/12/21/thoughts-on-script-loaders/
-         * https://hacks.mozilla.org/2009/06/defer/
-         */
-
         // ASYNC: load in parallel and execute as soon as possible
         ele.async = false;
         // DEFER: load in parallel but maintain execution order
@@ -523,14 +412,6 @@
     }
 
     function ready(key, callback) {
-        ///<summary>
-        /// INFO: use cases:
-        ///    head.ready(callBack);
-        ///    head.ready(document , callBack);
-        ///    head.ready("file.js", callBack);
-        ///    head.ready("label"  , callBack);
-        ///    head.ready(["label1", "label2"], callback);
-        ///</summary>
 
         // DOM ready check: head.ready(document, function() { });
         if (key === doc) {
@@ -706,16 +587,6 @@
     //#endregion
 }(window));
 
-/*********Wind JS*********/
-/*
- * PHPWind JS core
- * @Copyright   : Copyright 2011, phpwind.com
- * @Descript    : PHPWind核心JS
- * @Author      : chaoren1641@gmail.com
- * @Thanks      : head.js (http://headjs.com)
- * $Id: wind.js 21971 2012-12-17 12:11:36Z hao.lin $            :
- */
-
 
 /*
  * 防止浏览器不支持console报错
@@ -747,41 +618,20 @@ Wind.ready(function() {
 		ver = '',
 		//定义常用JS组件别名，使用别名加载
 		alias = {
-            datePicker         : 'datePicker/datePicker',
             jquery             : 'jquery',
-            colorPicker        : 'colorPicker/colorPicker',
-            tabs               : 'tabs/tabs',
-            swfobject          : 'swfobject',
-            imgready           : 'imgready',
-
-            //jquery util plugs
             ajaxForm          : 'ajaxForm',
             cookie            : 'cookie',
-			treeview          : 'treeview',
             treeTable         : 'treeTable/treeTable',
             draggable         : 'draggable',
             validate          : 'validate',
             artDialog         : 'artDialog/artDialog',
             iframeTools       : 'artDialog/iframeTools',
-            xd                : 'xd',//Iframe跨域通信
-            
-            noty			  : 'noty/noty',
-            jcrop             : 'jcrop/js/jcrop',
-            ajaxfileupload    : 'ajaxfileupload',
-
-
-			//native js util plugs
-			swfupload         : 'swfupload/swfupload',
-			webupload		  : 'WebUpload/webuploader',
-			md5				  : 'md5'
+            md5				  : 'md5'
 		},
         //CSS路径
 		alias_css = {
-            colorPicker : 'colorPicker/style',
             artDialog   : 'artDialog/skins/default',
-			datePicker	: 'datePicker/style',
             treeTable   : 'treeTable/treeTable',
-            jcrop       : 'jcrop/css/jquery.Jcrop.min'
 		};
 	//add suffix and version
 	for(var i in alias) {

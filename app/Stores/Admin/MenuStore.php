@@ -29,12 +29,14 @@ class MenuStore extends BaseStore
 
     /**
      * 后台管理树形菜单
+     * @param string $module
      * @return string
      */
-    public function getAllMenus()
+    public function getAllMenus($module='admin')
     {
         // 获取所有需要显示的菜单
-        $result = Menu::orderBy('sort', 'asc')
+        $result = Menu::where('module',$module)
+            ->orderBy('sort', 'asc')
             ->get()
             ->toArray();
         $tree = new TreeUtils();
@@ -60,11 +62,15 @@ class MenuStore extends BaseStore
             } else {
                 $result[$n]['type'] = '菜单';
             }
-            $result[$n]['str_manage'] = '<a href="' . route("menu.create", array("parentid" => $r['id'], "menuid" => $r['id'])) . '">添加子菜单</a> | <a href="' . route("menu.edit", array("menuid" => $r['id'])) . '">编辑</a> | <a class="js-ajax-delete" href="' . route("admin.menu.delete", array("menuid" => $r['id']) ). '">删除</a> ';
+            if ($module == 'admin') {
+                $result[$n]['str_manage'] = '<a href="' . route("menu.create", array("parentid" => $r['id'], "menuid" => $r['id'])) . '">添加子菜单</a> | <a href="' . route("menu.edit", array("menuid" => $r['id'])) . '">编辑</a> | <a class="js-ajax-delete" href="' . route("admin.menu.delete", array("menuid" => $r['id']) ). '">删除</a> ';
+            } else {
+                $result[$n]['str_manage'] = '<a href="' . route("index_menu.create", array("parentid" => $r['id'], "menuid" => $r['id'])) . '">添加子菜单</a> | <a href="' . route("index_menu.edit", array("menuid" => $r['id'])) . '">编辑</a> | <a class="js-ajax-delete" href="' . route("index_menu.delete", array("menuid" => $r['id']) ). '">删除</a> ';
+            }
         }
         $tree->init($result);
         $str = "<tr id='node-\$menuid' \$parentid_node>
-					<td style='padding-left:20px;'><input name='sorts[\$menuid]' type='text' size='1' value='\$sort' class='input input-order'></td>
+					<td style='padding-left:20px;'><input name='sorts[\$menuid]' type='text' size='1' value='\$sort' class='input input-order text-center'></td>
 					<td>\$menuid</td>
                     <td>\$spacer\$name</td>
                     <td>\$url</td>
@@ -80,14 +86,16 @@ class MenuStore extends BaseStore
 
     /**
      * select框menu
-     * @param $parentId
+     * @param int $parentId
+     * @param string $module
      * @return string
      */
-    public function selectMenus($parentId=0)
+    public function selectMenus($parentId=0,$module='admin')
     {
         $tree = new TreeUtils();
         $parentId = intval($parentId);
-        $result = Menu::orderBy('sort', 'asc')
+        $result = Menu::where('module',$module)
+            ->orderBy('sort', 'asc')
             ->get()
             ->toArray();
         foreach ($result as $r) {
@@ -119,19 +127,41 @@ class MenuStore extends BaseStore
     }
 
     /**
-     * 同步菜单
+     * 同步所有菜单，先删除原有数据，然后填充
      * @param $data
+     * @param null $module
      * @return array
      */
-    public function synchro($data)
+    public function synchro($data,$module=null)
     {
         $errorMenus = [];
         // 清空数据包
-        DB::connection($this->CONN_DB)->table($this->MENU_TB)->truncate();
-        // 同步配置文件菜单信息
-        $this->_import_menu($data, 0,$errorMenus);
-
+        if ($this->clearMenus($module)) {
+            // 同步配置文件菜单信息
+            $this->_import_menu($data, 0,$errorMenus);
+        }
         return $errorMenus;
+    }
+
+    /**
+     * 清理原有菜单
+     * @param null $module
+     * @return bool
+     */
+    private function clearMenus($module)
+    {
+        try {
+            if ($module == null) {
+                DB::connection($this->CONN_DB)->table($this->MENU_TB)->truncate();
+            } else {
+                DB::connection($this->CONN_DB)->table($this->MENU_TB)
+                    ->where('module',$module)
+                    ->delete();
+            }
+            return true;
+        } catch (\Exception $exception) {
+            return false;
+        }
     }
 
     /**
@@ -227,5 +257,21 @@ class MenuStore extends BaseStore
     public function updateMenu($id, $data)
     {
         return DB::connection($this->CONN_DB)->table($this->MENU_TB)->where(['id' => $id])->update($data);
+    }
+
+    /**
+     * 验证
+     * @param $mid
+     * @param $module
+     * @return bool
+     */
+    public function verifyMenuModule($mid,$module)
+    {
+        if (!DB::connection($this->CONN_DB)->table($this->MENU_TB)
+            ->where(['id' => $mid, 'module' => $module])
+            ->first()) {
+            return false;
+        }
+        return true;
     }
 }

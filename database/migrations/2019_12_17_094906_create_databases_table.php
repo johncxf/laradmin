@@ -24,7 +24,6 @@ class CreateDatabasesTable extends Migration
                 $table->char('email', 32)->unique()->index()->comment('邮箱');
                 $table->timestamp('email_verified_at')->nullable()->comment('邮箱验证时间');
                 $table->string('password',255)->comment('密码');
-                $table->string('salt', 6)->nullable($value=true)->comment('密码加盐');
                 $table->char('nickname', 20)->index()->comment('用户昵称');
                 $table->string('avatar', 255)->nullable($value=true)->comment('用户头像地址');
                 $table->unsignedTinyInteger('level')->default(0)->comment('等级');
@@ -76,7 +75,7 @@ class CreateDatabasesTable extends Migration
                 $table->string('password', 255)->comment('密码');
                 $table->string('avatar', 255)->nullable($value = true)->comment('头像');
                 $table->char('mobile', 11)->index()->comment('手机号');
-                $table->char('email', 50)->index()->comment('邮箱');
+                $table->char('email', 50)->unique()->index()->comment('邮箱');
                 $table->unsignedSmallInteger('login_failure')->default(0)->comment('失败次数');
                 $table->dateTime('login_time')->default('2000-01-01 00:00:00')->comment('登录时间');
                 $table->ipAddress('login_ip')->default('0.0.0.0')->comment('登录ip');
@@ -91,11 +90,11 @@ class CreateDatabasesTable extends Migration
             Schema::create($prefix.'role', function (Blueprint $table) {
                 $table->mediumIncrements('id')->comment('ID');
                 $table->string('name', 20)->comment('角色名称');
-                $table->unsignedSmallInteger('pid')->comment('父级ID');
+                $table->unsignedSmallInteger('pid')->default(0)->comment('父级ID');
                 $table->unsignedTinyInteger('status')->default(1)->comment('状态：1开启 0禁用');
                 $table->string('remark', 255)->comment('备注');
-                $table->dateTime('create_time')->comment('创建时间');
-                $table->dateTime('update_time')->comment('更新时间');
+                $table->dateTime('create_time')->nullable()->comment('创建时间');
+                $table->dateTime('update_time')->nullable()->comment('更新时间');
                 $table->smallInteger('listorder')->default(0)->comment('排序');
             });
         }
@@ -147,7 +146,7 @@ class CreateDatabasesTable extends Migration
                 $table->mediumIncrements('id')->comment('ID');
                 $table->char('name', 100)->comment('分类名称');
                 $table->string('remark',255)->nullable($value = true)->comment('备注');
-                $table->char('type',30)->default('article')->index()->comment('类型');
+                $table->char('type',30)->default('article')->index()->comment('类型:article,resource');
                 $table->mediumInteger('pid')->comment('父级分类ID');
             });
         }
@@ -156,7 +155,7 @@ class CreateDatabasesTable extends Migration
             Schema::create($prefix.'tag', function (Blueprint $table) {
                 $table->increments('id')->comment('ID');
                 $table->char('name', 100)->comment('标签名称');
-                $table->char('type',30)->default('article')->index()->comment('类型');
+                $table->char('type',30)->default('article')->index()->comment('类型:article,resource');
                 $table->string('remark',255)->nullable($value = true)->comment('备注');
             });
         }

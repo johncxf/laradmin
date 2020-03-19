@@ -4,8 +4,7 @@
         <li class="nav-item">
             <a href="/admin/index" class="nav-link" data-menu-level="0">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
-                <p>
-                    控制台
+                <p>控制台
                     <span class="right badge badge-danger">Hot</span>
                 </p>
             </a>
@@ -75,4 +74,3 @@
         @endif
     </ul>
 </nav>
-<!-- /.sidebar-menu -->

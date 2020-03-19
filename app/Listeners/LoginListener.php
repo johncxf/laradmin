@@ -17,7 +17,7 @@ class LoginListener
     /**
      * @var string admin表,用户表
      */
-    protected $ADMIN_TB, $USER_TB;
+    protected $ADMIN_TB, $USER_TB, $USER_ACCOUNT_TB;
 
     /**
      * 用户信息
@@ -34,6 +34,7 @@ class LoginListener
         $this->CONN_DB = 'mysql_laradmin';
         $this->ADMIN_TB = 'admin';
         $this->USER_TB = 'user';
+        $this->USER_ACCOUNT_TB = 'user_account';
     }
 
     /**
@@ -60,6 +61,7 @@ class LoginListener
         } else {
             if (isset($status) && $status == 'success') { //登录成功
                 $this->loginSuccess($event->getIp());
+                $this->verifyAccount($this->USER->id);
             } else {//登录失败
                 $this->loginFail();
             }
@@ -125,5 +127,28 @@ class LoginListener
     protected function loginFail()
     {
         DB::connection($this->CONN_DB)->table($this->USER_TB)->where(['email' => $this->USER])->increment('login_failure');
+    }
+
+    /**
+     * @param $uid
+     * @return bool
+     */
+    protected function verifyAccount($uid)
+    {
+        if (!DB::connection($this->CONN_DB)->table($this->USER_ACCOUNT_TB)
+            ->where('uid',$uid)
+            ->first()) {
+            $data = [
+                'uid' => $uid,
+                'money' => 0.00,
+                'frozen_money' => 0.00,
+                'gold' => 0,
+                'score' => 0
+            ];
+            if (!DB::connection($this->CONN_DB)->table($this->USER_ACCOUNT_TB)->insert($data)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

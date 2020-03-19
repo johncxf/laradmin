@@ -15,7 +15,7 @@ class UploadController extends Controller
             //获取文件的扩展名
             $ext = $file->getClientOriginalExtension();
             //定义文件名
-            $filename = time().$ext;
+            $filename = time().'.'.$ext;
             //文件存储目录
             $dir = 'uploads/'.date('Y-m-d');
             $file->move($dir, $filename);

@@ -25,7 +25,8 @@ class ProfileController extends Controller
     //个人中心
     public function index()
     {
-        return view('home.profile.index');
+        $account = $this->objStoreProfile->getAccountInfo(auth()->id());
+        return view('home.profile.index',compact('account'));
     }
     // 账号设置
     public function site()
@@ -98,7 +99,8 @@ class ProfileController extends Controller
     public function star()
     {
         $article_stars = $this->objStoreProfile->getStarArticle(auth()->id());
-        return view('home.profile.star', compact('article_stars'));
+        $resource_stars = $this->objStoreProfile->getStarResource(auth()->id());
+        return view('home.profile.star', compact('article_stars','resource_stars'));
     }
 
     /**

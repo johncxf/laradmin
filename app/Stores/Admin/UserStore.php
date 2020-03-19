@@ -36,11 +36,59 @@ class UserStore extends BaseStore
         return $user;
     }
 
+    /**
+     * @param array $where
+     * @param int $page
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
     public function getAllUsers($where=[],$page=10)
     {
         $ret = DB::connection($this->CONN_DB)->table($this->USER_TB)
             ->where($where)
             ->paginate($page);
         return $ret;
+    }
+
+    /**
+     * @param $uid
+     * @return \Illuminate\Database\Query\Builder|mixed
+     */
+    public function getUserById($uid)
+    {
+        return DB::connection($this->CONN_DB)->table($this->USER_TB)->find($uid);
+    }
+
+    /**
+     * 启用用户
+     * @param $uid
+     * @return bool
+     */
+    public function enable($uid)
+    {
+        try {
+            DB::connection($this->CONN_DB)->table($this->USER_TB)
+                ->where('id',$uid)
+                ->update(['user_status' => 1]);
+            return true;
+        } catch (\Exception $exception) {
+            return false;
+        }
+    }
+
+    /**
+     * 禁用用户
+     * @param $uid
+     * @return bool
+     */
+    public function forbidden($uid)
+    {
+        try {
+            DB::connection($this->CONN_DB)->table($this->USER_TB)
+                ->where('id',$uid)
+                ->update(['user_status' => 0]);
+            return true;
+        } catch (\Exception $exception) {
+            return false;
+        }
     }
 }

@@ -40,8 +40,7 @@ class RoleController extends Controller
         $data = [
             'name' => $request->name,
             'status' => $request->status,
-            'create_time' => time(),
-            'update_time' => 0,
+            'create_time' => date('Y-m-d H:i:s', time()),
             'listorder' => 0,
         ];
         if (isset($request->remark)) {
@@ -58,15 +57,20 @@ class RoleController extends Controller
     }
 
     /**
-     * 修改角色信息
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     *  修改角色信息
+     * @param RoleRequest $request
+     * @param Role $role
+     * @return \Illuminate\Http\RedirectResponse
      */
     public function update(RoleRequest $request, Role $role)
     {
-        $res = $role->update(['name' => $request->name, 'remark' => $request->remark, 'status' => $request->status]);
+        $data = [
+            'name' => $request->name,
+            'remark' => $request->remark,
+            'status' => $request->status,
+            'update_time' => date('Y-m-d H:i:s', time()),
+        ];
+        $res = $role->update($data);
         if ($res === true) {
             session()->flash('success', '编辑成功');
             return back();

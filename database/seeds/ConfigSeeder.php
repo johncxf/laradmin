@@ -29,9 +29,9 @@ class ConfigSeeder extends Seeder
             [
                 'name' => 'beian',
                 'title' => 'Beian',
-                'tip' => '浙ICP备17055405号-2',
+                'tip' => '浙ICP备17055405号',
                 'type' => 'string',
-                'value' => '浙ICP备17055405号-2',
+                'value' => '浙ICP备17055405号',
                 'content' => '',
                 'rule' => '',
                 'extend' => '',

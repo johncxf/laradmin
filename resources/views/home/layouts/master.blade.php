@@ -33,7 +33,7 @@
                                 <img class="profile-user-img img-fluid img-circle user-avatar"
                                      src="{{asset($user['avatar']?$user['avatar']:'img/default/avatar.jpg')}}" alt="User profile picture">
                             </a>
-                            <input type="file" style="display: none" name="avatar">
+                            <input type="file" style="display: none" name="avatar" class="home-avatar-file">
                         </div>
                         <div class="col-sm">
                             <div class="">
@@ -71,21 +71,27 @@
 <!-- Scripts -->
 <script src="{{ asset('js/app.js') }}" defer></script>
 <script src="{{asset('plugins/lrz/lrz.bundle.js')}}"></script>
+<script src="{{asset('plugins/artDialog/dialog.js')}}"></script>
 <!-- home.js -->
 <script>
     $(function () {
         $.ajaxSetup({
             headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')}
         });
-        $("input[type=file]").change(function () {
+        let domain = window.location.host;
+        let protocol = window.location.protocol;
+        let host = protocol+'//'+domain;
+        $("input.home-avatar-file").change(function () {
             /* 压缩图片 */
             lrz(this.files[0], {
-                //
+                // 压缩参数
+                width: 300,
+                height: 300
             }).then(function (rst) {
                 /* 处理成功后执行 */
                 rst.formData.append('base64img', rst.base64); // 添加额外参数
                 $.ajax({
-                    url: "upload_avatar",
+                    url: host+"/profile/upload_avatar",
                     type: "POST",
                     data: rst.base64,
                     success: function (data) {
@@ -104,7 +110,7 @@
         })
     });
     function clickAvatar() {
-        $("input[type=file]").click();
+        $("input.home-avatar-file").click();
     }
 </script>
 @yield('scripts')

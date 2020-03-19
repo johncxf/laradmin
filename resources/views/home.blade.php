@@ -11,7 +11,7 @@
         }
         .swiper-container img{
             width: 100%;
-            /*height: 500px;*/
+            max-height: 500px;
         }
     </style>
 @endsection
@@ -37,7 +37,7 @@
                                 <div class="row no-gutters">
                                     <div class="col-md-4">
                                         <a href="/article/{{$article->id}}.html">
-                                            <img src="{{asset('img/admin/photo1.png')}}" class="card-img" alt="">
+                                            <img src="{{asset($article->thumb?$article->thumb:'img/admin/photo1.png')}}" class="card-img" alt="">
                                         </a>
                                     </div>
                                     <div class="col-md-8">

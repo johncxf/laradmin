@@ -17,8 +17,14 @@ Route::get('/', 'HomeController@index')->name('home');
 Auth::routes(['verify' => true]);
 // home模块下
 Route::namespace('Home')->middleware('web')->group(function () {
+    // 栏目
     Route::get('category/{alias}.html', 'CategoryController@index');
+    // 文章
     Route::get('article/{aid}.html', 'ArticleController@index');
+    // 下载资源
+    Route::get('download', 'DownloadController@index');
+    Route::get('download/detail/{rid}', 'DownloadController@detail');
+
 });
 // 需要登录验证路由
 Route::namespace('Home')->middleware(['web','auth','verified'])->group(function () {
@@ -47,6 +53,15 @@ Route::namespace('Home')->middleware(['web','auth','verified'])->group(function 
     Route::get('article/star/{aid}', 'ArticleController@star');
     // 上传头像
     Route::post('profile/upload_avatar', 'ProfileController@uploadAvatar');
+    // 资源
+    Route::resource('resource', 'ResourceController', ['except' => ['show']]);
+    // 资源收藏
+    Route::get('download/star/{rid}', 'DownloadController@star');
+    // 资源下载
+    Route::get('download/make/{rid}', 'DownloadController@make');
+    // 金币消费明细
+    Route::get('account/gold', 'AccountController@gold');
+
 });
 Route::namespace('Common')->middleware(['web','auth'])->group(function () {
     // 个人主页
