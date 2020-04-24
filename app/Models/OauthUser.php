@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Slide extends Model
+class OauthUser extends Model
 {
     /**
      * The connection name for the model.
@@ -18,18 +18,18 @@ class Slide extends Model
      *
      * @var string
      */
-    protected $table = 'slide';
+    protected $table = 'oauth_user';
 
     /**
      * @var bool
      */
     public $timestamps = false;
 
-    public function getAll($type=null)
-    {
-        if ($type !== null) {
-            return $this->where('type',$type)->orderBy('sort','asc')->get()->toArray();
-        }
-        return $this->orderBy('sort','asc')->get()->toArray();
-    }
+    /**
+     * 可以被批量赋值的属性.
+     *
+     * @var array
+     */
+//    protected $fillable = ['uid', 'openid', 'unionid', 'session_key', 'token', 'expire_at'];
+
 }

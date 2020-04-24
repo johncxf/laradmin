@@ -21,7 +21,7 @@
                     </div>
                     <div class="card-footer">
                         <input type="hidden" name="role_id" value="{{$role->id}}" />
-                        <button class="btn btn-info js-ajax-submit" type="submit">保存</button>
+                        <button class="btn btn-info js-ajax-submit" type="button">保存</button>
                         <a href="/admin/role" class="btn btn-outline-secondary">返回</a>
                     </div>
                 </div>

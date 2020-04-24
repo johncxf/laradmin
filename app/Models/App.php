@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Slide extends Model
+class App extends Model
 {
     /**
      * The connection name for the model.
@@ -18,18 +18,20 @@ class Slide extends Model
      *
      * @var string
      */
-    protected $table = 'slide';
+    protected $table = 'app';
+
+    protected $primaryKey = 'app_id';
 
     /**
      * @var bool
      */
     public $timestamps = false;
 
-    public function getAll($type=null)
-    {
-        if ($type !== null) {
-            return $this->where('type',$type)->orderBy('sort','asc')->get()->toArray();
-        }
-        return $this->orderBy('sort','asc')->get()->toArray();
-    }
+    /**
+     * 可以被批量赋值的属性.
+     *
+     * @var array
+     */
+    protected $fillable = ['name', 'type', 'introduce', 'small_app_id', 'small_app_secret', 'url', 'status'];
+
 }

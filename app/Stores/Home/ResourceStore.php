@@ -60,7 +60,11 @@ class ResourceStore extends BaseStore
             ];
             foreach ($resources as $k => $resource) {
                 $resource->type = $type[$resource->type];
-                $resource->item_name = $new_item[$resource->item_id];
+                if (array_key_exists($resource->item_id,$new_item)) {
+                    $resource->item_name = $new_item[$resource->item_id];
+                } else {
+                    $resource->item_name = '';
+                }
                 $tag_ids = DB::connection($this->CONN_DB)->table($this->RESOURCE_TAG_RELATIONSHIP_TB)
                     ->where('resource_id',$resource->id)
                     ->pluck('tag_id')

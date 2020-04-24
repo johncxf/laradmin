@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', '角色管理')
+@section('title', '幻灯片管理')
 @section('content')
     @component('admin.component.tab')
         @slot('nav')

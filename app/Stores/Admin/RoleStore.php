@@ -95,7 +95,7 @@ class RoleStore extends BaseStore
      */
     public function deleteAuth($role_id)
     {
-        return DB::connection($this->CONN_DB)->table($this->ACCESS_TB)
+        return DB::connection($this->CONN_DB)->table($this->AUTH_ACCESS_TB)
             ->where(['role_id' => $role_id])->delete();
     }
 
@@ -116,7 +116,7 @@ class RoleStore extends BaseStore
      */
     public function addAccess($data)
     {
-        return DB::connection($this->CONN_DB)->table($this->ACCESS_TB)->insert($data);
+        return DB::connection($this->CONN_DB)->table($this->AUTH_ACCESS_TB)->insert($data);
     }
 
     /**
@@ -145,7 +145,7 @@ class RoleStore extends BaseStore
         if (!$delete_role) {
             return false;
         }
-        DB::connection($this->CONN_DB)->table($this->ACCESS_TB)
+        DB::connection($this->CONN_DB)->table($this->AUTH_ACCESS_TB)
             ->where(['role_id' => $role_id])
             ->delete();
         return true;

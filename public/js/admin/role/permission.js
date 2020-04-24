@@ -1,3 +1,13 @@
+$(document).ready(function() {
+    // 树形菜单
+    Wind.css('treeTable');
+    Wind.use('treeTable', function () {
+        $("#dnd-example").treeTable({
+            indent: 20,
+            // initialState: 'expanded'
+        });
+    });
+});
 var ajaxForm_list = $('form.js-ajax-form');
 if (ajaxForm_list.length) {
     Wind.use('ajaxForm', 'artDialog', function () {
@@ -42,7 +52,7 @@ if (ajaxForm_list.length) {
             }
 
             //ie处理placeholder提交问题
-            if ($.browser.msie) {
+            if ($.support.leadingWhitespace) {
                 form.find('[placeholder]').each(function () {
                     var input = $(this);
                     if (input.val() == input.attr('placeholder')) {
@@ -98,16 +108,7 @@ if (ajaxForm_list.length) {
 
     });
 }
-// 树形菜单
-$(document).ready(function () {
-    Wind.css('treeTable');
-    Wind.use('treeTable', function () {
-        $("#dnd-example").treeTable({
-            indent: 20,
-            // initialState: 'expanded'
-        });
-    });
-});
+
 //重新刷新页面，使用location.reload()有可能导致重新提交
 function reloadPage(win) {
     var location = win.location;

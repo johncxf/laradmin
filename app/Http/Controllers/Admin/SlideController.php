@@ -23,7 +23,7 @@ class SlideController extends Controller
      */
     public function index(Slide $slide)
     {
-        $slides = $slide->getAll('home');
+        $slides = $slide->getAll();
         return view('admin.slide.index',compact('slides'));
     }
 

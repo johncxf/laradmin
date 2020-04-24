@@ -9,7 +9,6 @@
 
 namespace App\Stores\Home;
 
-
 use App\Stores\BaseStore;
 use Illuminate\Support\Facades\DB;
 
@@ -340,7 +339,7 @@ class DownloadStore extends BaseStore
      * @param $rids
      * @return array|mixed
      */
-    private function getResourceByRids($rids)
+    public function getResourceByRids($rids)
     {
         $resources = DB::connection($this->CONN_DB)->table($this->RESOURCE_TB)
             ->where('status',1)

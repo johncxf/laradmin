@@ -1,5 +1,5 @@
 @extends('admin.layouts.app')
-@section('title', '添加栏目')
+@section('title', '添加幻灯片')
 @section('content')
     @component('admin.component.tab')
         @slot('nav')
@@ -29,7 +29,7 @@
                         <div class="form-group row">
                             <label for="" class="col-sm-1 col-form-label">图片</label>
                             <div class="col-sm-5">
-                                <input type="file" accept="image/jpeg" capture="camera">
+                                <input type="file" accept="image" capture="camera">
                             </div>
                         </div>
                         <div class="col-sm-6 row mb-3">
@@ -41,8 +41,10 @@
                         <div class="form-group row">
                             <label for="" class="col-sm-1 col-form-label">类型</label>
                             <div class="col-sm-5">
-                                <select class="custom-select" name="status">
-                                    <option selected="selected" value="home">前台首页</option>
+                                <select class="custom-select" name="type">
+                                    <option value="home" {{$slide['type']=='home'?'selected':''}}>前台首页</option>
+                                    <option value="miniprogram" {{$slide['type']=='miniprogram'?'selected':''}}>微信小程序</option>
+                                    <option value="blog" {{$slide['type']=='blog'?'selected':''}}>博客</option>
                                 </select>
                             </div>
                         </div>

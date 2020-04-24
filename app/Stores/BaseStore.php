@@ -37,7 +37,11 @@ class BaseStore
         $RESOURCE_STAR_TB,
         $USER_ACCOUNT_TB,
         $USER_GOLD_LOG_TB,
-        $DOWNLOAD_TB;
+        $DOWNLOAD_TB,
+        $OAUTH_USER,
+        $APP,
+        $APP_SMALLAPP_SESSION;
+
     /**
      * BaseStore constructor.
      */
@@ -69,6 +73,10 @@ class BaseStore
         $this->USER_ACCOUNT_TB = 'user_account';
         $this->USER_GOLD_LOG_TB = 'user_gold_log';
         $this->DOWNLOAD_TB = 'download';
+        $this->OAUTH_USER = 'oauth_user';
+        $this->APP = 'app';
+        $this->APP_SMALLAPP_SESSION = 'app_smallapp_session';
+
     }
 
 }

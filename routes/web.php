@@ -24,6 +24,8 @@ Route::namespace('Home')->middleware('web')->group(function () {
     // 下载资源
     Route::get('download', 'DownloadController@index');
     Route::get('download/detail/{rid}', 'DownloadController@detail');
+    // 搜索
+    Route::get('search','SearchController@make');
 
 });
 // 需要登录验证路由

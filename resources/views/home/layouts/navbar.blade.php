@@ -38,8 +38,9 @@
                 @endif
             @endCategory
         </ul>
-        <form class="form-inline my-2 my-lg-0">
-            <input class="form-control mr-sm-2" type="search" placeholder="请输入资源信息" aria-label="Search">
+        <form class="form-inline my-2 my-lg-0" method="GET" action="/search">
+            @csrf
+            <input class="form-control mr-sm-2" name="keyword" type="search" value="" placeholder="请输入资源信息" aria-label="Search">
         </form>
         @guest
             <div class="nav-item">
@@ -69,7 +70,7 @@
                                     <a href="/profile/index">个人主页</a>
                                 </div>
                                 <div class="text-center col-sm-6">
-                                    <a href="/profile/moment">最新动态</a>
+                                    <a href="/resource">上传资源</a>
                                 </div>
                             </div>
                         </li>
