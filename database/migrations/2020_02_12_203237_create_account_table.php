@@ -13,11 +13,11 @@ class CreateAccountTable extends Migration
      */
     public function up()
     {
-        // 表前缀
-        $prefix = 'la_';
+        // 数据库
+        $CONN_DB = 'mysql_laradmin';
         // 用户余额表
-        if (!Schema::hasTable($prefix.'user_account')) {
-            Schema::create($prefix.'user_account', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('user_account')) {
+            Schema::connection($CONN_DB)->create('user_account', function (Blueprint $table) {
                 $table->unsignedInteger('uid')->primary()->comment('用户id');
                 $table->decimal('money',10,2)->default(0.00)->comment('可用金额');
                 $table->decimal('frozen_money',10,2)->default(0.00)->comment('冻结金额');
@@ -26,8 +26,8 @@ class CreateAccountTable extends Migration
             });
         }
         // 积分记录表
-        if (!Schema::hasTable($prefix.'user_gold_log')) {
-            Schema::create($prefix.'user_gold_log', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('user_gold_log')) {
+            Schema::connection($CONN_DB)->create('user_gold_log', function (Blueprint $table) {
                 $table->bigIncrements('id')->comment('id');
                 $table->unsignedInteger('uid')->default(0)->comment('用户uid');
                 $table->unsignedMediumInteger('gold')->default(0)->comment('金币记录');

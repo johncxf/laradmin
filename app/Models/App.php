@@ -33,5 +33,4 @@ class App extends Model
      * @var array
      */
     protected $fillable = ['name', 'type', 'introduce', 'small_app_id', 'small_app_secret', 'url', 'status'];
-
 }

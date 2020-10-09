@@ -13,11 +13,11 @@ class CreateAppTable extends Migration
      */
     public function up()
     {
-        // 表前缀
-        $prefix = 'la_';
+        // 数据库
+        $CONN_DB = 'mysql_laradmin';
         // 第三方用户表
-        if (!Schema::hasTable($prefix.'app')) {
-            Schema::create($prefix.'app', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('app')) {
+            Schema::connection($CONN_DB)->create('app', function (Blueprint $table) {
                 $table->increments('app_id');
                 $table->unsignedTinyInteger('type')->comment('APP类型: 1.Android 2.IOS 3.WinPhone 4.WebApp 5.SmallApp');
                 $table->string('name',20)->comment('app类型名称');
@@ -31,8 +31,8 @@ class CreateAppTable extends Migration
             });
         }
         // 第三方用户表
-        if (!Schema::hasTable($prefix.'oauth_user')) {
-            Schema::create($prefix.'oauth_user', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('oauth_user')) {
+            Schema::connection($CONN_DB)->create('oauth_user', function (Blueprint $table) {
                 $table->bigIncrements('id');
                 $table->string('from',30)->comment('用户来源');
                 $table->string('name',30)->comment('第三方昵称');
@@ -49,8 +49,8 @@ class CreateAppTable extends Migration
             });
         }
         // 微信小程序授权表
-        if (!Schema::hasTable($prefix.'app_smallapp_session')) {
-            Schema::create($prefix.'app_smallapp_session', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('app_smallapp_session')) {
+            Schema::connection($CONN_DB)->create('app_smallapp_session', function (Blueprint $table) {
                 $table->bigIncrements('session_id');
                 $table->unsignedMediumInteger('app_id')->default(0)->comment('应用id');
                 $table->unsignedInteger('uid')->default(0)->comment('本站用户id');

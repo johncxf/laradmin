@@ -13,6 +13,8 @@
 .env
 .env.backup
 .phpunit.result.cache
+.DS_Store
+package-lock.json
 Homestead.json
 Homestead.yaml
 npm-debug.log

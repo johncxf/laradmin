@@ -191,6 +191,8 @@ class BlogStore
          $now_year = date('Y', time());
          if (date('Y',$time) < $now_year) {// 往年
              $res = date('Y',$time).'年';
+         } elseif (($time + (60 * 60 * 24 * 7)) < time()) {// 三天前
+             $res = date('m-d',$time);
          } elseif (($time + (60 * 60 * 24 * 3)) < time()) {// 三天前
              $res = '三天前';
          } elseif (($time + (60 * 60 * 24 * 2)) < time()) {

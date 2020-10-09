@@ -12,6 +12,7 @@ namespace App\Stores\Admin;
 
 use App\Models\Admin;
 use App\Stores\BaseStore;
+use GeoIp2\Database\Reader;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -44,6 +45,32 @@ class UserStore extends BaseStore
     public function getAllUsers($where=[],$page=10)
     {
         $ret = DB::connection($this->CONN_DB)->table($this->USER_TB)
+            ->where($where)
+            ->paginate($page);
+        $city = '';
+        $country = '';
+        foreach ($ret as $key => $item) {
+            $ip = $item->last_login_ip;
+            if (!empty($ip)) {
+                $country = getCountryByIP($ip);
+                $city = getCityByIP($ip);
+            }
+
+            $ret[$key]->country = $country;
+            $ret[$key]->city = $city;
+        }
+
+        return $ret;
+    }
+
+    /**
+     * @param array $where
+     * @param int $page
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function getOauthUser($where=[],$page=10)
+    {
+        $ret = DB::connection($this->CONN_DB)->table($this->OAUTH_USER)
             ->where($where)
             ->paginate($page);
         return $ret;

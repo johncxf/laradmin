@@ -177,10 +177,11 @@ class ResourceStore extends BaseStore
             DB::connection($this->CONN_DB)->beginTransaction();
             DB::connection($this->CONN_DB)->table($this->RESOURCE_TB)->delete($rid);
             DB::connection($this->CONN_DB)->table($this->RESOURCE_TAG_RELATIONSHIP_TB)
-                ->where(['resource_id'=>$rid,'uid'=>$uid])
+                ->where(['resource_id'=>$rid])
                 ->delete();
             DB::connection($this->CONN_DB)->commit();
         } catch (\Exception $exception) {
+//            dd($exception->getMessage());
             DB::connection($this->CONN_DB)->rollBack();
             return false;
         }

@@ -13,11 +13,11 @@ class CreateContentTable extends Migration
      */
     public function up()
     {
-        // 表前缀
-        $prefix = 'la_';
+        // 数据库
+        $CONN_DB = 'mysql_laradmin';
         // 栏目表
-        if (!Schema::hasTable($prefix.'category')) {
-            Schema::create($prefix.'category', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('category')) {
+            Schema::connection($CONN_DB)->create('category', function (Blueprint $table) {
                 $table->mediumIncrements('id')->comment('ID');
                 $table->char('name', 100)->comment('栏目名称');
                 $table->char('alias', 100)->unique()->comment('栏目缩略名');
@@ -29,8 +29,8 @@ class CreateContentTable extends Migration
             });
         }
         // 分类表
-        if (!Schema::hasTable($prefix.'item')) {
-            Schema::create($prefix.'item', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('item')) {
+            Schema::connection($CONN_DB)->create('item', function (Blueprint $table) {
                 $table->mediumIncrements('id')->comment('ID');
                 $table->char('name', 100)->comment('分类名称');
                 $table->string('remark',255)->nullable($value = true)->comment('备注');
@@ -39,8 +39,8 @@ class CreateContentTable extends Migration
             });
         }
         // 标签表
-        if (!Schema::hasTable($prefix.'tag')) {
-            Schema::create($prefix.'tag', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('tag')) {
+            Schema::connection($CONN_DB)->create('tag', function (Blueprint $table) {
                 $table->increments('id')->comment('ID');
                 $table->char('name', 100)->comment('标签名称');
                 $table->char('type',30)->default('article')->index()->comment('类型:article,resource');
@@ -48,8 +48,8 @@ class CreateContentTable extends Migration
             });
         }
         // 文章表
-        if (!Schema::hasTable($prefix.'article')) {
-            Schema::create($prefix.'article', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('article')) {
+            Schema::connection($CONN_DB)->create('article', function (Blueprint $table) {
                 $table->Increments('id')->comment('ID');
                 $table->string('title', 255)->index()->comment('文章标题');
                 $table->unsignedInteger('uid')->default(0)->comment('创建者UID');
@@ -66,8 +66,8 @@ class CreateContentTable extends Migration
             });
         }
         // 链接表
-        if (!Schema::hasTable($prefix.'link')) {
-            Schema::create($prefix.'link', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('link')) {
+            Schema::connection($CONN_DB)->create('link', function (Blueprint $table) {
                 $table->mediumIncrements('id')->comment('ID');
                 $table->string('name', 255)->comment('链接名称');
                 $table->string('url', 255)->comment('链接地址');
@@ -77,22 +77,22 @@ class CreateContentTable extends Migration
             });
         }
         // 文章分类关联表
-        if (!Schema::hasTable($prefix.'article_item_relationship')) {
-            Schema::create($prefix.'article_item_relationship', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('article_item_relationship')) {
+            Schema::connection($CONN_DB)->create('article_item_relationship', function (Blueprint $table) {
                 $table->unsignedInteger('article_id')->index()->default(0)->comment('文章id');
                 $table->unsignedMediumInteger('item_id')->index()->default(0)->comment('分类id');
             });
         }
         // 文章标签关联表
-        if (!Schema::hasTable($prefix.'article_tag_relationship')) {
-            Schema::create($prefix.'article_tag_relationship', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('article_tag_relationship')) {
+            Schema::connection($CONN_DB)->create('article_tag_relationship', function (Blueprint $table) {
                 $table->unsignedInteger('article_id')->index()->default(0)->comment('文章id');
                 $table->unsignedMediumInteger('tag_id')->index()->default(0)->comment('标签id');
             });
         }
         // 评论表
-        if (!Schema::hasTable($prefix.'article_comment')) {
-            Schema::create($prefix.'article_comment', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('article_comment')) {
+            Schema::connection($CONN_DB)->create('article_comment', function (Blueprint $table) {
                 $table->increments('id')->comment('评论id');
                 $table->unsignedInteger('article_id')->index()->default(0)->comment('文章id');
                 $table->unsignedInteger('uid')->default(0)->comment('评论者uid');
@@ -104,8 +104,8 @@ class CreateContentTable extends Migration
             });
         }
         // 幻灯片表
-        if (!Schema::hasTable($prefix.'slide')) {
-            Schema::create($prefix.'slide', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('slide')) {
+            Schema::connection($CONN_DB)->create('slide', function (Blueprint $table) {
                 $table->increments('id')->comment('ID');
                 $table->char('name',50)->default('')->comment('名称');
                 $table->string('content',255)->default('')->comment('图片地址');
@@ -115,16 +115,16 @@ class CreateContentTable extends Migration
             });
         }
         // 文章收藏表
-        if (!Schema::hasTable($prefix.'article_star')) {
-            Schema::create($prefix.'article_star', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('article_star')) {
+            Schema::connection($CONN_DB)->create('article_star', function (Blueprint $table) {
                 $table->unsignedInteger('uid')->default(0)->comment('用户id');
                 $table->unsignedInteger('article_id')->default(0)->comment('文章id');
                 $table->dateTime('create_at')->nullable()->comment('时间');
             });
         }
         // 文章点赞表
-        if (!Schema::hasTable($prefix.'article_praise')) {
-            Schema::create($prefix.'article_praise', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('article_praise')) {
+            Schema::connection($CONN_DB)->create('article_praise', function (Blueprint $table) {
                 $table->unsignedInteger('uid')->default(0)->comment('用户id');
                 $table->unsignedInteger('article_id')->default(0)->comment('文章id');
                 $table->dateTime('create_at')->nullable()->comment('时间');

@@ -83,7 +83,6 @@ DB_USERNAME=root
 DB_PASSWORD=root
 
 # laradmin数据库，项目中现在使用这个数据库配置
-DB_CONNECTION=mysql
 DB_HOST_LARADMIN=127.0.0.1
 DB_PORT_LARADMIN=3306
 DB_DATABASE_LARADMIN=laradmin

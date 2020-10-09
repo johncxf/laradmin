@@ -7,6 +7,8 @@
  * @Time: 13:24
  */
 
+use GeoIp2\Database\Reader;
+
 /**
  * @param string $url get请求地址
  * @param int $httpCode 返回状态码
@@ -80,4 +82,34 @@ function get_client_ip($type = 0,$adv=false) {
     $long = sprintf("%u",ip2long($ip));
     $ip   = $long ? array($ip, $long) : array('0.0.0.0', 0);
     return $ip[$type];
+}
+
+/**
+ * @param $ip
+ * @return string
+ */
+function getCountryByIP($ip) {
+    try {
+        $reader = new Reader(public_path('plugins/geoLite2/GeoLite2-City.mmdb'));
+        $record = $reader->city($ip);
+        $country = $record->country->names['zh-CN'];
+        return $country;
+    } catch (Exception $exception) {
+        return '';
+    }
+}
+
+/**
+ * @param $ip
+ * @return string|null
+ */
+function getCityByIP($ip) {
+    try {
+        $reader = new Reader(public_path('plugins/geoLite2/GeoLite2-City.mmdb'));
+        $record = $reader->city($ip);
+        $city = $record->city->names['zh-CN'];
+        return $city;
+    } catch (Exception $exception) {
+        return '';
+    }
 }

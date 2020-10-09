@@ -1,6 +1,6 @@
 <?php
 /*
- * @Description: 
+ * @Description:
  * @Author: chenxf
  * @LastEditors: chenxf
  * @Date: 2020/1/9
@@ -67,10 +67,15 @@ class HomeStore extends BaseStore
      */
     public function getBeianInfo()
     {
-        $info = DB::connection($this->CONN_DB)->table($this->CONFIG_TB)
-            ->where('name','beian')
-            ->first();
-        return $info->value;
+        try {
+            $info = DB::connection($this->CONN_DB)->table($this->CONFIG_TB)
+                ->where('name','beian')
+                ->first();
+            return $info->value;
+        } catch (\Exception $e) {
+            return false;
+        }
+
     }
 
 }

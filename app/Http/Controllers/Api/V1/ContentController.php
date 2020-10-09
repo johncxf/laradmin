@@ -19,7 +19,10 @@ class ContentController extends BaseApiController
     // 文章详情
     public function show($id)
     {
+        // 获取文章内容
         $content = Article::where('status',2)->findOrFail($id);
+        // 增加pv
+        Article::where('id',$id)->increment('pv');
 
         return $this->response->array($content->toArray());
     }

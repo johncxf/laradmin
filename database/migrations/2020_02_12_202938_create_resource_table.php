@@ -13,11 +13,11 @@ class CreateResourceTable extends Migration
      */
     public function up()
     {
-        // 表前缀
-        $prefix = 'la_';
+        // 数据库
+        $CONN_DB = 'mysql_laradmin';
         // 资源表
-        if (!Schema::hasTable($prefix.'resource')) {
-            Schema::create($prefix.'resource', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('resource')) {
+            Schema::connection($CONN_DB)->create('resource', function (Blueprint $table) {
                 $table->bigIncrements('id')->comment('ID');
                 $table->string('title',255)->default('')->comment('资源名称');
                 $table->unsignedInteger('uid')->default(0)->comment('用户id');
@@ -33,23 +33,23 @@ class CreateResourceTable extends Migration
             });
         }
         // 资源标签关联表
-        if (!Schema::hasTable($prefix.'resource_tag_relationship')) {
-            Schema::create($prefix.'resource_tag_relationship', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('resource_tag_relationship')) {
+            Schema::connection($CONN_DB)->create('resource_tag_relationship', function (Blueprint $table) {
                 $table->unsignedInteger('resource_id')->index()->default(0)->comment('文章id');
                 $table->unsignedMediumInteger('tag_id')->index()->default(0)->comment('标签id');
             });
         }
         // 资源收藏表
-        if (!Schema::hasTable($prefix.'resource_star')) {
-            Schema::create($prefix.'resource_star', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('resource_star')) {
+            Schema::connection($CONN_DB)->create('resource_star', function (Blueprint $table) {
                 $table->unsignedInteger('uid')->default(0)->comment('用户id');
                 $table->unsignedInteger('rid')->default(0)->comment('资源id');
                 $table->dateTime('create_at')->nullable()->comment('时间');
             });
         }
         // 资源下载表
-        if (!Schema::hasTable($prefix.'download')) {
-            Schema::create($prefix.'download', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('download')) {
+            Schema::connection($CONN_DB)->create('download', function (Blueprint $table) {
                 $table->bigIncrements('id')->comment('下载id');
                 $table->unsignedInteger('uid')->default(0)->comment('用户id');
                 $table->unsignedInteger('rid')->default(0)->comment('资源id');

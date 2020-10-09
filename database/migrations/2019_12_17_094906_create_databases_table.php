@@ -13,11 +13,11 @@ class CreateDatabasesTable extends Migration
      */
     public function up()
     {
-        // 表前缀
-        $prefix = 'la_';
+        // 数据库
+        $CONN_DB = 'mysql_laradmin';
         // 用户表
-        if (!Schema::hasTable($prefix.'user')) {
-            Schema::create($prefix.'user', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('user')) {
+            Schema::connection($CONN_DB)->create('user', function (Blueprint $table) {
                 $table->increments('id')->comment('用户ID');
                 $table->char('username', 20)->index()->comment('用户名, 不可重复');
                 $table->char('mobile', 11)->nullable($value=true)->index()->comment('手机号');
@@ -44,16 +44,16 @@ class CreateDatabasesTable extends Migration
             });
         }
         // 密码重置表
-        if (!Schema::hasTable($prefix.'password_resets')) {
-            Schema::create($prefix.'password_resets', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('password_resets')) {
+            Schema::connection($CONN_DB)->create('password_resets', function (Blueprint $table) {
                 $table->string('email',255)->index();
                 $table->string('token',255);
                 $table->timestamp('created_at')->nullable();
             });
         }
         // 菜单表
-        if (!Schema::hasTable($prefix.'menu')) {
-            Schema::create($prefix.'menu', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('menu')) {
+            Schema::connection($CONN_DB)->create('menu', function (Blueprint $table) {
                 $table->smallIncrements('id')->comment('ID');
                 $table->smallInteger('parentId')->default(0)->comment('父级ID');
                 $table->char('module', 20)->comment('模块');
@@ -68,8 +68,8 @@ class CreateDatabasesTable extends Migration
             });
         }
         // 管理员表
-        if (!Schema::hasTable($prefix.'admin')) {
-            Schema::create($prefix.'admin', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('admin')) {
+            Schema::connection($CONN_DB)->create('admin', function (Blueprint $table) {
                 $table->increments('id')->comment('ID');
                 $table->string('username', 50)->index()->comment('用户名');
                 $table->string('password', 255)->comment('密码');
@@ -86,8 +86,8 @@ class CreateDatabasesTable extends Migration
             });
         }
         // 角色表
-        if (!Schema::hasTable($prefix.'role')) {
-            Schema::create($prefix.'role', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('role')) {
+            Schema::connection($CONN_DB)->create('role', function (Blueprint $table) {
                 $table->mediumIncrements('id')->comment('ID');
                 $table->string('name', 20)->comment('角色名称');
                 $table->unsignedSmallInteger('pid')->default(0)->comment('父级ID');
@@ -99,23 +99,23 @@ class CreateDatabasesTable extends Migration
             });
         }
         // 用户角色对应表
-        if (!Schema::hasTable($prefix.'role_user')) {
-            Schema::create($prefix.'role_user', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('role_user')) {
+            Schema::connection($CONN_DB)->create('role_user', function (Blueprint $table) {
                 $table->unsignedInteger('role_id')->default(0)->comment('角色ID');
                 $table->unsignedInteger('user_id')->default(0)->comment('用户ID');
                 $table->char('type', 15)->default('admin')->comment('类型：admin，user');
             });
         }
         // 权限授权表
-        if (!Schema::hasTable($prefix.'auth_access')) {
-            Schema::create($prefix.'auth_access', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('auth_access')) {
+            Schema::connection($CONN_DB)->create('auth_access', function (Blueprint $table) {
                 $table->unsignedMediumInteger('role_id')->default(0)->comment('角色ID');
                 $table->string('rule_name', 255)->comment('规则唯一英文标识,全小写');
             });
         }
         // 配置表
-        if (!Schema::hasTable($prefix.'config')) {
-            Schema::create($prefix.'config', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('config')) {
+            Schema::connection($CONN_DB)->create('config', function (Blueprint $table) {
                 $table->increments('id')->comment('ID');
                 $table->string('name', 30)->comment('变量名');
                 $table->string('title', 100)->comment('变量标题');
@@ -129,8 +129,8 @@ class CreateDatabasesTable extends Migration
         }
 
         // 用户登录日志表
-        if (!Schema::hasTable($prefix.'user_login_log')) {
-            Schema::create($prefix.'user_login_log', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('user_login_log')) {
+            Schema::connection($CONN_DB)->create('user_login_log', function (Blueprint $table) {
                 $table->integer('uid')->primary()->unsigned()->comment('用户id');
                 $table->ipAddress('ip')->index()->comment('ip');
                 $table->unsignedTinyInteger('status')->comment('登录状态 1成功 0失败');
@@ -140,8 +140,8 @@ class CreateDatabasesTable extends Migration
         }
 
         // 验证码表
-        if (!Schema::hasTable($prefix.'verify')) {
-            Schema::create($prefix.'verify', function (Blueprint $table) {
+        if (!Schema::connection($CONN_DB)->hasTable('verify')) {
+            Schema::connection($CONN_DB)->create('verify', function (Blueprint $table) {
                 $table->bigIncrements('id')->comment('ID');
                 $table->unsignedInteger('uid')->default(0)->index()->comment('用户id');
                 $table->string('token',255)->comment('验证令牌');

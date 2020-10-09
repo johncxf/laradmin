@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Stores\Admin\UserStore;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -16,12 +17,27 @@ class UserController extends Controller
     }
 
     /**
-     * 用户列表
+     * 本站用户列表
+     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        $users = $this->objStoreUser->getAllUsers();
+        $where = array();
+        if ($request['uid'] && $request['uid'] !== null) {
+            $where[] = ['id', '=', $request['uid']];
+        }
+        if ($request['nickname'] && $request['nickname'] !== null) {
+            $where[] = ['nickname', 'like', '%'.$request['nickname'].'%'];
+        }
+        if ($request['user_status'] !== null && $request['user_status'] != -1) {
+            $where[] = ['user_status', '=', $request['user_status']];
+        }
+        if ($request['user_type']) {
+            $where[] = ['user_type', '=', $request['user_type']];
+        }
+
+        $users = $this->objStoreUser->getAllUsers($where);
 
         return view('admin.user.index', compact('users'));
     }
@@ -50,5 +66,26 @@ class UserController extends Controller
                 return back()->with('danger','启用失败');
             }
         }
+    }
+
+    public function oauthUser(Request $request)
+    {
+        $where = array();
+        if ($request['uid'] && $request['uid'] !== null) {
+            $where[] = ['uid', '=', $request['uid']];
+        }
+        if ($request['name'] && $request['name'] !== null) {
+            $where[] = ['name', 'like', '%'.$request['name'].'%'];
+        }
+        if ($request['status'] !== null && $request['status'] != -1) {
+            $where[] = ['status', '=', $request['status']];
+        }
+        if ($request['from']) {
+            $where[] = ['from', '=', $request['from']];
+        }
+
+        $users = $this->objStoreUser->getOauthUser($where);
+
+        return view('admin.user.oauthuser', compact('users'));
     }
 }
